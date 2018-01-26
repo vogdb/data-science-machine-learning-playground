@@ -1,0 +1,1 @@
+my thoughts and homework for Data Science course by Yandex
