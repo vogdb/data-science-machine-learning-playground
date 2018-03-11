@@ -1,1 +1,2 @@
-my thoughts and homework for Data Science course by Yandex
+### About
+Playground for learning Data science and Machine learning
