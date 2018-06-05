@@ -75,6 +75,7 @@ def stratified_cross_val_score(x, y):
     )
     kfold = KFold(n_splits=train_params['fold_num'])
     # results = cross_val_score(estimator, X, y, cv=kfold, fit_params={'callbacks': [metrics]})
+    # Important! `metrics` requires `validation_data` which can't be figured out in cross_val_score
     return cross_val_score(estimator, x_stratified, y_stratified, cv=kfold)
 
 
