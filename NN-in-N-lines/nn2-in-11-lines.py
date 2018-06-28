@@ -2,10 +2,13 @@ import numpy as np
 
 
 # sigmoid function
-def nonlin(x, deriv=False):
-    if (deriv == True):
-        return x * (1 - x)
+def nonlin(x):
     return 1 / (1 + np.exp(-x))
+
+
+# sigmoid derivative with respect to weights
+def nonlin_derivative(x):
+    return x * (1 - x)
 
 
 # input dataset
@@ -44,7 +47,7 @@ for idx in range(100):
 
     # multiply how much we missed by the
     # slope of the sigmoid at the values in l1
-    weights_delta = y_error * nonlin(y_predict, True)
+    weights_delta = y_error * nonlin_derivative(y_predict)
 
     # update weights
     network_layer_weights += np.dot(network_input.T, weights_delta)
