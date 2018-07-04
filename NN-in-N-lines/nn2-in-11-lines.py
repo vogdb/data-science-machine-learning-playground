@@ -48,8 +48,10 @@ for idx in range(100):
     # multiply how much we missed by the
     # slope of the sigmoid at the values in l1
     weights_delta = y_error * nonlin_derivative(y_predict)
+    # finish chain rule of derivative back propagation
+    weights_delta = np.dot(network_input.T, weights_delta)
 
     # update weights
-    network_layer_weights += np.dot(network_input.T, weights_delta)
+    network_layer_weights += weights_delta
     print('y_predict: {}, y_error: {}, weights: {}'.
           format(y_predict.flatten(), y_error.flatten(), network_layer_weights.flatten()))
