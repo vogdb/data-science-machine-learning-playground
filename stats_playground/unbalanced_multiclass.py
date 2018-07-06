@@ -25,8 +25,10 @@ cnf_matrix_norm = np.round(cnf_matrix_norm, 2)
 
 def print_cnf_matrix(cnf_matrix):
     labels = np.array(iris.target_names)
-    cnf_matrix = np.hstack((labels.T[:, np.newaxis], cnf_matrix))
-    cnf_matrix = np.vstack((np.concatenate([['actual/predicted'], labels]), cnf_matrix))
+    labels_true = np.core.defchararray.add('true ', labels[:, np.newaxis])
+    cnf_matrix = np.hstack((labels_true, cnf_matrix))
+    labels_pred = np.core.defchararray.add('pred ', labels)
+    cnf_matrix = np.vstack((np.concatenate([[''], labels_pred]), cnf_matrix))
     df = pd.DataFrame(cnf_matrix)
     print(df.to_string())
 
