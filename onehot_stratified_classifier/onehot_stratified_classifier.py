@@ -1,9 +1,13 @@
+import os
+
 import keras
 import numpy as np
+import pandas as pd
+from create_model import create_model
+from metrics import Metrics
+from keras.callbacks import ModelCheckpoint
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold, KFold, cross_val_score
-
-from create_model import create_model
 
 train_params = dict(
     batch_size=128,
@@ -22,21 +26,32 @@ def stratified_fold_cycle(x, y):
     y = keras.utils.to_categorical(y, num_classes=2)
     val_acc_list = []
 
-    for train_indices, val_indices in kfold_split:
+    for index, (train_indices, val_indices) in enumerate(kfold_split):
         x_train = x[train_indices]
         y_train = y[train_indices]
         x_val = x[val_indices]
         y_val = y[val_indices]
         model = create_model()
+        train_metrics = Metrics()
+        best_model_filepath = os.path.join('result', 'best_network_' + str(index) + '.hdf5')
+        callback_list = [
+            ModelCheckpoint(best_model_filepath, save_best_only=True, monitor='val_acc', mode='max'),
+            train_metrics
+        ]
         model.fit(
             x_train,
             y_train,
             epochs=train_params['epochs'],
             batch_size=train_params['batch_size'],
             verbose=train_params['verbose'],
+            validation_data=(x_val, y_val),
+            callbacks=callback_list,
         )
         score = model.evaluate(x_val, y_val)
         val_acc_list.append(score[1])
+        metrics_df = pd.DataFrame(train_metrics.get_data())
+        metrics_filepath = os.path.join('result', 'train_metrics.csv')
+        metrics_df.to_csv(metrics_filepath, header=True, sep=';', index=False)
     return val_acc_list
 
 

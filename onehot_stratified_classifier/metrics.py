@@ -14,6 +14,8 @@ class Metrics(keras.callbacks.Callback):
 
     def calculate(self, model, X_val, y_val):
         y_predict = np.asarray(model.predict(X_val))
+        y_val = np.argmax(y_val, axis=1)
+        y_predict = np.argmax(y_predict, axis=1)
 
         result = {
             'val_acc': accuracy_score(y_val, y_predict),
