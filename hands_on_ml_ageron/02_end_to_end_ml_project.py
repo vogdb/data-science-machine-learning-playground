@@ -141,6 +141,30 @@ def single_pipeline_example(X, y):
     print('actual scores: \n{}'.format(list(map(int, y.iloc[:5]))))
 
 
+def reciprocal_dstr_example():
+    '''
+    Shows why reciprocal is good for a uniform distribution of scales(logs)
+    '''
+    from scipy.stats import reciprocal
+    import matplotlib.pyplot as plt
+
+    distr = reciprocal(20, 200)
+    samples = distr.rvs(10000, random_state=42)
+    plt.figure(figsize=(10, 4))
+    plt.subplot(121)
+    plt.title('Reciprocal distribution (scale=1.0)')
+    plt.hist(samples, bins=50)
+    plt.subplot(122)
+    plt.title('Log of this distribution')
+    plt.hist(np.log(samples), bins=50)
+    plt.show()
+
+    samples = np.array(samples)
+    range3_4 = np.sum(np.logical_and(samples < np.exp(4), samples > np.exp(3)))
+    range4_5 = np.sum(np.logical_and(samples > np.exp(4), samples < np.exp(5)))
+    print(range3_4, range4_5)
+
+
 # load dataset
 # fetch_housing_data()
 housing = load_housing_data()
